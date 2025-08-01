@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import L from 'leaflet';
   import axios from 'axios';
+  import 'leaflet/dist/leaflet.css';
 
   export let country = '';
   let map;
@@ -22,8 +23,9 @@
       } else {
         marker = L.marker([lat, lon]).addTo(map);
       }
-    } catch {
+    } catch (error) {
       // silently ignore errors
+      console.error('Failed to update map:', error);
     }
   }
 
@@ -34,7 +36,13 @@
     }).addTo(map);
   });
 
-  $: updateMap();
+  // Reactive: run updateMap only when country changes AND map is ready
+  $: if (map && country) {
+    updateMap();
+  }
 </script>
 
-<div bind:this={mapContainer} style="height: 400px; width: 100%; border: 1px solid #ccc; border-radius: 8px;"></div>
+<div
+  bind:this={mapContainer}
+  style="height: 400px; width: 100%; border: 1px solid #ccc; border-radius: 8px;"
+></div>

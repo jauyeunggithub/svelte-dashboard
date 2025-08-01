@@ -1,5 +1,6 @@
 import { render, fireEvent } from "@testing-library/svelte";
 import FormWidget from "../FormWidget.svelte";
+import { vi, test } from "vitest";
 
 test("FormWidget dispatches search event with input value", async () => {
   const { getByPlaceholderText, getByText, component } = render(FormWidget);

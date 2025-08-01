@@ -13,13 +13,21 @@
 
 <style>
   main {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* space between items */
     padding: 20px;
   }
+
+  /* Each widget takes about half width */
+  main > :global(*) {
+    flex: 1 1 45%; /* grow, shrink, basis ~45% */
+    min-width: 300px; /* optional: prevent too small */
+  }
+
+  /* Full width for these widgets */
   .full-width {
-    grid-column: 1 / -1;
+    flex-basis: 100%;
   }
 </style>
 
