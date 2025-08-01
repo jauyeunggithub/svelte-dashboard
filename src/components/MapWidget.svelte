@@ -46,5 +46,6 @@
 
 <div
   bind:this={mapContainer}
+  data-testid="map-container"
   style="height: 400px; width: 100%; border: 1px solid #ccc; border-radius: 8px;"
 ></div>

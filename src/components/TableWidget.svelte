@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import axios from 'axios';
 
   export let country = '';
@@ -6,14 +7,27 @@
   let loading = false;
   let error = '';
 
-  $: if (country) fetchData();
+  // Reactive block:
+  // If country has a value, fetch data.
+  // If country is empty, reset data and error to clear the table/error message.
+  $: {
+    if (country) {
+      fetchData();
+    } else {
+      data = null;
+      error = '';
+      loading = false; // Ensure loading is reset too
+    }
+  }
 
   async function fetchData() {
     loading = true;
     error = '';
-    data = null;
+    data = null; // Clear previous data immediately
     try {
-      const res = await axios.get(`https://disease.sh/v3/covid-19/countries/${country}`);
+      const res = await axios.get(
+        `https://disease.sh/v3/covid-19/countries/${country}`,
+      );
       data = res.data;
     } catch (e) {
       error = 'Error fetching data.';
@@ -55,7 +69,8 @@
     width: 100%;
     border-collapse: collapse;
   }
-  th, td {
+  th,
+  td {
     border: 1px solid #ddd;
     padding: 8px;
   }
