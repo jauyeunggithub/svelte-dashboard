@@ -4,41 +4,47 @@ import axios from 'axios';
 import { vi } from 'vitest';
 
 vi.mock('axios');
-
 const mockMap = {
   setView: vi.fn().mockReturnThis(),
   addLayer: vi.fn().mockReturnThis(),
   remove: vi.fn().mockReturnThis(),
   invalidateSize: vi.fn().mockReturnThis(),
 };
+
 const mockTileLayer = {
   addTo: vi.fn().mockReturnThis(),
 };
+
 const mockMarker = {
   addTo: vi.fn().mockReturnThis(),
   bindPopup: vi.fn().mockReturnThis(),
   openPopup: vi.fn().mockReturnThis(),
-  setLatLng: vi.fn().mockReturnThis(),
 };
 
-vi.mock("leaflet", () => ({
-  default: {
-    map: vi.fn(() => mockMap),
-    tileLayer: vi.fn(() => mockTileLayer),
-    marker: vi.fn(() => mockMarker),
-    Icon: {
-      Default: {
-        imagePath: "",
-        mergeOptions: vi.fn(),
-        call: vi.fn(),
-        prototype: { options: {}, _getIconUrl: vi.fn(() => "") },
-      },
-      Icon: vi.fn(() => ({ options: {}, _getIconUrl: vi.fn(() => "") })),
-    },
-    latLng: vi.fn((lat, lng) => ({ lat, lng })),
-  },
-}));
+vi.mock('leaflet', async (importOriginal) => {
+  const originalModule = await importOriginal();
 
+  return {
+    ...originalModule,
+    default: {
+      ...originalModule.default,
+      map: vi.fn(() => mockMap),
+      tileLayer: vi.fn(() => mockTileLayer),
+      marker: vi.fn(() => mockMarker),
+      latLng: originalModule.default.latLng || ((lat, lng) => ({ lat, lng })),
+      Icon: originalModule.default.Icon || {
+        Default: {
+          imagePath: '',
+          mergeOptions: vi.fn(),
+          prototype: {
+            options: {},
+            _getIconUrl: vi.fn(() => ''),
+          },
+        },
+      },
+    },
+  };
+});
 describe('MapWidget component', () => {
   test('initializes Leaflet map on mount', () => {
     render(MapWidget);

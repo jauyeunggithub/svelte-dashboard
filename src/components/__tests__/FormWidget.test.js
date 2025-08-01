@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
 import { test, expect, vi, beforeEach } from "vitest";
-import SearchInput from "../SearchInput.svelte"; // Assuming SearchInput.svelte is in the parent directory
+import SearchInput from "../FormWidget.svelte"; // Assuming SearchInput.svelte is in the parent directory
 import { createEventDispatcher } from "svelte"; // Import createEventDispatcher for mocking
 
 // Mock svelte's createEventDispatcher to spy on dispatched events
