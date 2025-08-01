@@ -116,7 +116,7 @@ test("displays error message on fetch failure", async () => {
 });
 
 test("fetches new data when country prop changes", async () => {
-  const { component } = render(TableWidget, {
+  const { rerender } = render(TableWidget, {
     props: { country: "InitialCountry" },
   });
 
@@ -131,9 +131,9 @@ test("fetches new data when country prop changes", async () => {
   vi.clearAllMocks();
   axios.get.mockResolvedValue({ data: mockAnotherCovidData });
 
-  // Change the country prop
+  // Change the country prop using rerender
   await act(async () => {
-    component.$set({ country: "Anotherland" });
+    rerender({ country: "Anotherland" });
     await Promise.resolve(); // Flush reactive statement
   });
 
@@ -153,21 +153,22 @@ test("fetches new data when country prop changes", async () => {
 });
 
 test("clears data and shows initial message when country is set to empty string", async () => {
-  const { component } = render(TableWidget, { props: { country: "Testland" } });
+  const { rerender } = render(TableWidget, { props: { country: "Testland" } });
 
   // Wait for initial data fetch
   await waitFor(() => {
     expect(screen.getByText(mockCovidData.country)).toBeInTheDocument();
   });
 
-  // Set country to empty string
+  // Set country to empty string using rerender
   await act(async () => {
-    component.$set({ country: "" });
+    rerender({ country: "" });
     await Promise.resolve();
   });
 
   // Expect initial message to reappear
   expect(screen.getByText("Enter a country to see data.")).toBeInTheDocument();
   expect(screen.queryByRole("table")).not.toBeInTheDocument();
-  expect(axios.get).toHaveBeenCalledTimes(1); // No new fetch should occur
+  // axios.get should not be called again when country is cleared
+  expect(axios.get).toHaveBeenCalledTimes(1);
 });

@@ -13,7 +13,9 @@
     if (!country || !map) return;
 
     try {
-      const res = await axios.get(`https://restcountries.com/v3.1/name/${country}?fullText=true`);
+      const res = await axios.get(
+        `https://restcountries.com/v3.1/name/${country}?fullText=true`,
+      );
       const c = res.data[0];
       const [lat, lon] = c.latlng;
       map.setView([lat, lon], 5);

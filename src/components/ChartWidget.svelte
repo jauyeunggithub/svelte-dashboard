@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
+  import { onDestroy } from 'svelte';
   import { Chart, registerables } from 'chart.js';
   import axios from 'axios';
 
